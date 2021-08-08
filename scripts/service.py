@@ -66,14 +66,9 @@ def default():
             	
 		# Resultados
                 respuesta = np.argmax(result)
-                if respuesta==0:
-                    ClassPred='COVID19'
-                elif respuesta==1:
-                    ClassPred='Normal'
-                else:
-                    ClassPred=' Neumonia'
+                CLASES=['COVID19','NORMAL','NEUMONIA']
+                ClassPred=CLASES[respuesta]
             	print("Pedicción:", ClassPred)
-
             	#Results as Json
             	data["predictions"] = []
             	r = {"label": ClassPred}
