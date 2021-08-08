@@ -1,9 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Aug  8 11:37:58 2021
+
+@author: USER
+"""
+
 #Import Flask
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 
 #Import Keras
-from keras.preprocessing import image
+from tensorflow.keras.preprocessing import image
 
 #Import python files
 import numpy as np
@@ -61,23 +68,27 @@ def default():
             test_image /= 255
 
             with graph.as_default():
-            	result = loaded_model.predict(test_image)
+                result = loaded_model.predict(test_image)
             	# print(result)
-            	
-		# Resultados
                 respuesta = np.argmax(result)
-                CLASES=['COVID19','NORMAL','NEUMONIA']
-                ClassPred=CLASES[respuesta]
-            	print("Pedicción:", ClassPred)
+                #CLASES=['COVID19','NORMAL','NEUMONIA']
+                if respuesta == 0:
+                    ClassPred='COVID19'
+                elif respuesta==1:
+                    ClassPred='NORMAL'
+                else:
+                    ClassPred='Neumonia'
+                #ClassPred=CLASES[respuesta]
+            print("Pedicción:", ClassPred)
             	#Results as Json
-            	data["predictions"] = []
-            	r = {"label": ClassPred}
-            	data["predictions"].append(r)
+            data["predictions"] = []
+            r = {"label": ClassPred}
+            data["predictions"].append(r)
 
             	#Success
-            	data["success"] = True
+            data["success"] = True
 
-    return jsonify(data)
+            return jsonify(data)
 
 # Run de application
-app.run(host='0.0.0.0',port=port, threaded=False)
+app.run(host='127.0.0.1',port=port, threaded=False)
